@@ -188,7 +188,32 @@ def makedirs(dir):
         os.makedirs(dir)
     except:
         pass
+def make_teacher(mode, teacher_settings):
+    dog_targets =  ['Dog_1', 'Dog_2','Dog_3','Dog_4']
+    human_targets = ['Patient_1','Patient_2','Patient_3','Patient_4','Patient_5','Patient_6','Patient_7', 'Patient_8']
+    ictal_data_X, ictal_data_y = [], []
+    interictal_data_X, interictal_data_y = [], []
 
+    if mode == 'dog':
+        freq = 200
+        targets = dog_targets
+    elif mode == 'human':
+        freq = 500
+        targets = human_targets
+
+    for target in targets:
+        ictal_X, ictal_y = PrepDataTeacher(target, type='ictal', settings=teacher_settings, freq=freq).apply()
+        interictal_X, interictal_y = PrepDataTeacher(target, type='interictal', settings=teacher_settings, freq=freq).apply()
+        ictal_data_X.append(ictal_X)
+        ictal_data_y.append(ictal_y)
+        interictal_data_X.append(interictal_X)
+        interictal_data_y.append(interictal_y)
+
+    ictal_X = np.concatenate(ictal_data_X)
+    ictal_y = np.concatenate(ictal_data_y)
+    interictal_X = np.concatenate(interictal_data_X)
+    interictal_y = np.concatenate(interictal_data_y)
+    return ictal_X, ictal_y, interictal_X, interictal_y
 
 def objective(trial):
 
